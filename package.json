@@ -1,0 +1,50 @@
+{
+  "name": "cvwo-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "@mui/icons-material": "^5.2.5",
+    "@mui/lab": "^5.0.0-alpha.63",
+    "@mui/material": "latest",
+    "@reduxjs/toolkit": "^1.7.1",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "axios": "^0.24.0",
+    "date-fns": "^2.28.0",
+    "formik": "^2.2.9",
+    "http-proxy-middleware": "^2.0.1",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-hook-form": "^7.22.5",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^6.2.1",
+    "react-scripts": "latest",
+    "redux": "^4.1.2",
+    "typescript": "latest",
+    "yup": "^0.32.11"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/react-router": "^5.1.17",
+    "@types/react-router-dom": "^5.3.2"
+  }
+}
