@@ -1,6 +1,6 @@
 import { Alert, Checkbox, Chip, Container, CssBaseline, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../app/store";
 import { TaskObject } from "../features/taskSlice";
@@ -13,17 +13,23 @@ import { formatDistance, formatDistanceToNowStrict, intervalToDuration } from "d
 import { getPlannedTasks, PlannedTask } from "../features/plannedTaskSlice";
 import { isToday } from "date-fns/esm";
 import TaskItem from "./TaskItem";
+import DeleteTaskDialog from "./DeleteTaskDialog";
 
 export default function PlannedList() {
 
     const loading = useSelector((state: RootState) => state.plannedTask.status) === 'loading';
     const plannedTasks = useSelector((state: RootState) => state.plannedTask.plannedTasks);
-
     const navigate = useNavigate();
 
     const dispatch = useAppDispatch();
 
-    var isChip = false;
+    const [dialogIsOpen, setDialogIsOpen] = useState(false)
+
+    const openDialog = () => {
+        setDialogIsOpen(true)
+    }
+
+    const closeDialog = () => setDialogIsOpen(false)
 
     useEffect(() => {
         dispatch(getPlannedTasks());
@@ -43,6 +49,8 @@ export default function PlannedList() {
             >
 
                 <Typography variant="h5">Planned</Typography>
+
+                <DeleteTaskDialog open={dialogIsOpen} onClose={closeDialog} />
 
                 {loading
                     ? <Loading />
@@ -65,7 +73,7 @@ export default function PlannedList() {
                                             {taskGroup.items &&
                                                 taskGroup.items.map((task: TaskObject, index: number) => {
                                                     return (
-                                                        <TaskItem task={task} currTime={currTime} key={task.TaskID}/>
+                                                        <TaskItem task={task} currTime={currTime} openDialog={openDialog} key={task.TaskID}/>
                                                     )
                                                 })}
                                         </Stack>

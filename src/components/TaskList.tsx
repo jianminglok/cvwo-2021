@@ -1,6 +1,6 @@
-import { Alert, Checkbox, Chip, Container, CssBaseline, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Stack, Typography } from "@mui/material";
+import { Alert, Button, Checkbox, Chip, Container, CssBaseline, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../app/store";
 import { getTasks, TaskObject, TaskFilters, GroupedTasks } from "../features/taskSlice";
@@ -11,6 +11,7 @@ import { Navigate, useNavigate, useParams } from "react-router";
 import { formatRelative, isAfter, isBefore, isSameDay, parseISO, subDays } from 'date-fns';
 import { formatDistance, formatDistanceToNowStrict, intervalToDuration } from "date-fns";
 import TaskItem from "./TaskItem";
+import DeleteTaskDialog from "./DeleteTaskDialog";
 
 export default function TaskList() {
 
@@ -32,6 +33,14 @@ export default function TaskList() {
         searchQuery: searchQuery
     }
 
+    const [dialogIsOpen, setDialogIsOpen] = useState(false)
+
+    const openDialog = () => {
+        setDialogIsOpen(true)
+    }
+
+    const closeDialog = () => setDialogIsOpen(false)
+
     useEffect(() => {
         dispatch(getTasks(taskFilters));
         document.title = "Tasks";
@@ -51,6 +60,8 @@ export default function TaskList() {
             >
 
                 <Typography variant="h5">{tag ? 'Tasks Tagged ' + tag : priority ? capitalize(priority) + ' Priority Tasks' : searchQuery ? 'Search Tasks' : 'All Tasks'}</Typography>
+                
+                <DeleteTaskDialog open={dialogIsOpen} onClose={closeDialog} />
 
                 {loading 
                     ? <Loading />
@@ -68,7 +79,7 @@ export default function TaskList() {
                                             {taskGroup.items &&
                                                 taskGroup.items.map((task: TaskObject, index: number) => {
                                                     return (
-                                                        <TaskItem task={task} currTime={currTime} key={task.TaskID}/>
+                                                        <TaskItem task={task} currTime={currTime} openDialog={openDialog} key={task.TaskID}/>
                                                     )
                                                 })}
                                         </Stack>

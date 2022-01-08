@@ -1,9 +1,9 @@
 import { Alert, Checkbox, Chip, Container, CssBaseline, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../app/store";
-import { getTasks, TaskObject, TaskFilters, DeleteTask, deleteTask, TaskServiceResponse, toggleTask } from "../features/taskSlice";
+import { getTasks, TaskObject, TaskFilters, DeleteTask, deleteTask, TaskServiceResponse, toggleTask, setDeleteTaskDetails } from "../features/taskSlice";
 import Loading from "./Loading";
 import NavBar from "./NavBar";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -11,14 +11,21 @@ import { Navigate, useNavigate, useParams } from "react-router";
 import { formatRelative, isAfter, isBefore, isSameDay, parseISO, subDays } from 'date-fns';
 import { formatDistance, formatDistanceToNowStrict, intervalToDuration } from "date-fns";
 import { getPlannedTasks } from "../features/plannedTaskSlice";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import DeleteTaskDialog from "./DeleteTaskDialog";
 
 interface TaskItemObject {
     task: TaskObject
     currTime: Date
+    openDialog(): void;
 }
 
-export default function TaskItem({ task, currTime }: TaskItemObject) {
-
+export default function TaskItem({ task, currTime, openDialog }: TaskItemObject) {
     var isChip = false;
 
     const navigate = useNavigate();
@@ -49,31 +56,20 @@ export default function TaskItem({ task, currTime }: TaskItemObject) {
         }
     }
 
-    const handleDelete = (taskId: string) => {
-        dispatch(deleteTask({"taskId": taskId}))
-            .unwrap()
-            .then((res: TaskServiceResponse) => {
-                if (res.success != "") {
-                    if(window.location.href.includes('/tasks/planned')) {
-                        dispatch(getPlannedTasks());
-                    } else {
-                        dispatch(getTasks(taskFilters));
-                    }
-                }
-            })
-            .catch(() => {
-            });
+    const handleDelete = (taskName: string, taskId: string) => {
+        openDialog();
+        dispatch(setDeleteTaskDetails({taskName, taskId}));
     }
 
     const handleComplete = (taskId: string) => {
-        dispatch(toggleTask({"taskId": taskId}))
+        dispatch(toggleTask({ "taskId": taskId }))
             .unwrap()
             .then((res: TaskServiceResponse) => {
                 if (res.success != "") {
-                    if(window.location.href.includes('/tasks/planned')) {
-                        dispatch(getPlannedTasks());
-                    } else {
+                    if (window.location.href.includes('/tasks')) {
                         dispatch(getTasks(taskFilters));
+                    } else {
+                        dispatch(getPlannedTasks());
                     }
                 }
             })
@@ -95,7 +91,7 @@ export default function TaskItem({ task, currTime }: TaskItemObject) {
         <Paper variant="outlined">
             <ListItem
                 secondaryAction={
-                    <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(task.TaskID)}>
+                    <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(task.name, task.TaskID)}>
                         <DeleteIcon />
                     </IconButton>
                 }

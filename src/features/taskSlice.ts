@@ -23,6 +23,7 @@ interface Task {
     status: 'idle' | 'loading'
     taskSliceError?: Object
     taskSliceSuccess?: boolean
+    deleteTaskDetails: SetDeleteTaskDetails
 }
 
 interface GetTaskResponse {
@@ -67,9 +68,18 @@ export interface DeleteTask {
     taskId: string
 }
 
+export interface SetDeleteTaskDetails {
+    taskName: string
+    taskId: string
+}
+
 const initialState: Task = {
     groupedTasks: [],
     status: 'idle',
+    deleteTaskDetails: {
+        taskName: "",
+        taskId: ""
+    }
 }
 
 export const getTasks = createAsyncThunk<GetTaskResponse, TaskFilters, { rejectValue: TaskError }>(
@@ -120,6 +130,13 @@ export const deleteTask = createAsyncThunk<TaskServiceResponse, DeleteTask, { re
     async (deleteTaskDetails) => {
         const data = await taskService.deleteTask(deleteTaskDetails.taskId);
         return { success: data }
+    }
+)
+
+export const setDeleteTaskDetails = createAsyncThunk(
+    "task/setDeleteTaskId",
+    ({taskName, taskId }: SetDeleteTaskDetails) => {
+        return { taskDetails: { taskName, taskId } }
     }
 )
 
@@ -176,6 +193,9 @@ export const taskSlice = createSlice({
                 state.status = 'idle';
                 state.taskSliceError = action.payload?.error;
                 state.taskSliceSuccess = false;
+            })
+            .addCase(setDeleteTaskDetails.fulfilled, (state, action) => {
+                state.deleteTaskDetails = action.payload.taskDetails;
             })
     }
 })
