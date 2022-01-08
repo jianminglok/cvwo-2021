@@ -30,22 +30,38 @@ const getPlannedTasks = () => {
         })
 };
 
-const signIn = (email: string, password: string) => {
+const createTask = (name: string, priority: string, ownerId: string, tags?: string[], dueDateTime?: string) => {
     return axios
-        .post("/api/users/signin", {
-            email,
-            password,
+        .post("/api/tasks/create", {
+            name,
+            tags,
+            priority,
+            dueDateTime,
+            ownerId
         })
         .then((response) => {
-            if (response.data.success) {
-                localStorage.setItem("user", JSON.stringify(response.data.user_id));
-            }
             return response.data;
         });
 };
 
+const toggleTask = (taskId: string) => {
+    return axios
+        .put("/api/tasks/completed/" + taskId)
+        .then((response) => {
+            return response.data;
+        })
+};
+
+const deleteTask = (taskId: string) => {
+    return axios
+        .delete("/api/tasks/" + taskId)
+        .then((response) => {
+            return response.data;
+        })
+};
+
 const signOut = () => {
-    axios
+    return axios
         .post("/api/users/signout")
         .then((response) => {
             if (response.data.success) {
@@ -58,7 +74,9 @@ const signOut = () => {
 const taskService = {
     getTasks,
     getPlannedTasks,
-    signIn,
+    createTask,
+    toggleTask,
+    deleteTask,
     signOut,
 };
 

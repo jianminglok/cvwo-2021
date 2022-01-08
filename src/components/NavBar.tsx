@@ -294,13 +294,13 @@ export default function NavBar() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    <ListItem button onClick={() => navigateAndClose('/tasks/planned')}>
+                    <ListItem button onClick={() => navigateAndClose('/')}>
                         <ListItemIcon>
                             <AccessTimeIcon />
                         </ListItemIcon>
                         <ListItemText primary="Planned" />
                     </ListItem>
-                    <ListItem button onClick={() => navigateAndClose('/')}>
+                    <ListItem button onClick={() => navigateAndClose('/tasks')}>
                         <ListItemIcon>
                             <TaskIcon />
                         </ListItemIcon>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, ChangeEvent } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -28,12 +28,48 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import TimePicker from '@mui/lab/TimePicker';
+import { CreateTask, createTask, TaskServiceResponse } from '../features/taskSlice';
+import { Autocomplete, Chip, Stack } from '@mui/material';
+import { Cancel } from '@mui/icons-material';
+import { response } from 'express';
+
+interface TagObject {
+    data: string
+}
+
+const handleDelete = () => {
+    console.info('You clicked the delete icon.');
+};
+
+const Tags = ({ data }: TagObject) => {
+    return (
+        <Box
+            sx={{
+                height: "100%",
+                display: "flex",
+                margin: "0 0.5rem 0 0",
+                justifyContent: "center",
+                alignContent: "center",
+            }}
+        >
+            <Typography>{data}</Typography>
+        </Box>
+    );
+};
+
+interface TagOptionType {
+    inputValue?: string;
+    name: string;
+}
+
+const previousTags: TagOptionType[] = [
+];
 
 export default function NewTask() {
     const loading = useSelector((state: RootState) => state.auth.value.status) === 'loading'
 
-    const signUpError = useSelector((state: RootState) => state.auth.value.signUpError);
-    const signUpSuccess = useSelector((state: RootState) => state.auth.value.signUpSuccess);
+    const createTaskError = useSelector((state: RootState) => state.task.taskSliceError);
+    const createTaskSuccess = useSelector((state: RootState) => state.task.taskSliceSuccess);
 
     const { register, handleSubmit, control, setError, watch, formState: { errors } } = useForm();
 
@@ -42,18 +78,28 @@ export default function NewTask() {
     const [dateValue, setDateValue] = useState<Date | null>(null);
     const [timeValue, setTimeValue] = useState<Date | null>(null);
 
+    const [tags, setTags] = useState<string[] | undefined>([]);
+
     const navigate = useNavigate();
 
-    const onSubmit = (values: UserSignUp) => {
-        /*
-        dispatch(signUp(values))
+    const onSubmit = (values: CreateTask) => {
+        values.tags = tags;
+        if (dateValue) {
+            values.dueDate = dateValue;
+        }
+        if (timeValue) {
+            values.dueTime = timeValue;
+        }
+        values.ownerId = localStorage.getItem("user") || "";
+        dispatch(createTask(values))
             .unwrap()
-            .then(() => {
-
+            .then((res: TaskServiceResponse) => {
+                if (res.success != "") {
+                    navigate('/')
+                }
             })
             .catch(() => {
-            });;
-        */
+            });
     };
 
     useEffect(() => {
@@ -74,10 +120,10 @@ export default function NewTask() {
                     New Task
                 </Typography>
 
-                {signUpError && <Alert severity="error" sx={{ mt: 2 }}>{signUpError}</Alert>}
-                {signUpSuccess &&
+                {createTaskError && <Alert severity="error" sx={{ mt: 2 }}>{createTaskError}</Alert>}
+                {createTaskSuccess &&
                     <Alert severity="success" sx={{ mt: 2 }}>
-                        You may click the link below sign in to your newly created account
+                        Your task has been created
                     </Alert>
                 }
 
@@ -90,39 +136,25 @@ export default function NewTask() {
                             id="taskName"
                             label="Task Name"
                             error={errors.taskName ? true : false}
-                            helperText={errors.taskName ? errors.taskName?.message : "Task Name"}
+                            helperText={errors.taskName ? errors.taskName?.message : "Please enter a task name"}
                             {...register("taskName", {
                                 required: "Task Name",
                                 maxLength: {
                                     value: 100,
-                                    message: "Your last name must be at most 100 characters"
+                                    message: "Your task name must be at most 100 characters"
                                 }
                             })}
                         />
-                        <TextField
-                            label="Email Address"
-                            error={errors.email ? true : false}
-                            helperText={errors.email ? "Please enter a valid email address" : "Please enter your email address"}
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            autoComplete="email"
-                            {...register("email", {
-                                required: true,
-                                pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
-                            })}
-                        />
-                        <FormControl fullWidth sx={{ mt: 1 }}>
+                        <FormControl fullWidth sx={{ mt: 2 }}>
                             <TextField
                                 select
-                                id="taskPriority"
+                                id="priority"
                                 label="Priority"
                                 defaultValue=''
-                                error={errors.taskPriority ? true : false}
+                                error={errors.priority ? true : false}
                                 helperText="Please select the task priority"
                                 required
-                                {...register("taskPriority", {
+                                {...register("priority", {
                                     required: true
                                 })}
                             >
@@ -131,6 +163,31 @@ export default function NewTask() {
                                 <MenuItem value='low'>Low</MenuItem>
                             </TextField>
                         </FormControl>
+                        <Autocomplete
+                            value={tags}
+                            onChange={(event, newValue) => {
+                                setTags(newValue.map(str => str.replace(/\s/g, '')));
+                            }}
+                            multiple
+                            options={previousTags.map((option: TagOptionType) => option.name)}
+                            freeSolo
+                            renderTags={(value: readonly string[], getTagProps) =>
+                                value.map((option: string, index: number) => (
+                                    <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                                ))
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    id="tags"
+                                    placeholder="Tags"
+                                    fullWidth
+                                    margin="normal"
+                                    helperText="You may add tags by pressing the enter key after each tag"
+                                    
+                                />
+                            )}
+                        />
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                                 label="Due Date"
@@ -144,10 +201,8 @@ export default function NewTask() {
                                         error={errors.dueDate ? true : false}
                                         fullWidth
                                         margin="normal"
-                                        helperText="Please enter the task due date"
+                                        helperText="You may enter a task due date"
                                         id="dueDate"
-                                        {...register("dueDate", {
-                                        })}
                                     />
                                 }
                             />
@@ -155,6 +210,11 @@ export default function NewTask() {
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <TimePicker
                                 label="Due Time"
+                                ampm={false}
+                                openTo="hours"
+                                views={['hours', 'minutes', 'seconds']}
+                                inputFormat="HH:mm:ss"
+                                mask="__:__:__"
                                 value={timeValue}
                                 onChange={(newValue) => {
                                     setTimeValue(newValue);
@@ -165,10 +225,8 @@ export default function NewTask() {
                                         error={errors.dueTime ? true : false}
                                         fullWidth
                                         margin="normal"
-                                        helperText="Please enter the task due time"
+                                        helperText="You may enter a task due time"
                                         id="dueTime"
-                                        {...register("dueTime", {
-                                        })}
                                     />
                                 }
                             />

@@ -56,7 +56,7 @@ export default function SignUp() {
 
             })
             .catch(() => {
-            });;
+            });
     };
     
     useEffect(() => {

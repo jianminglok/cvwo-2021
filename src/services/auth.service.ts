@@ -29,7 +29,7 @@ const signIn = (email: string, password: string) => {
 };
 
 const signOut = () => {
-  axios
+  return axios
     .post("/api/users/signout")
     .then((response) => {
       if (response.data.success) {

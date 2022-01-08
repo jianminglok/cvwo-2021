@@ -77,9 +77,9 @@ export default function App() {
           >
             <NavBar />
             <Routes>
-              <Route path="/" element={<RequireAuth><TaskList /></RequireAuth>} />
+              <Route path="/" element={<RequireAuth><PlannedList /></RequireAuth>} />
+              <Route path="/tasks" element={<RequireAuth><TaskList /></RequireAuth>} />
               <Route path="/tasks/new" element={<RequireAuth><NewTask /></RequireAuth>} />
-              <Route path="/tasks/planned" element={<RequireAuth><PlannedList /></RequireAuth>} />
               <Route path="/tasks/tag/:tag" element={<RequireAuth><TaskList /></RequireAuth>} />
               <Route path="/tasks/priority/:priority" element={<RequireAuth><TaskList /></RequireAuth>} />
               <Route path="/tasks/sort/:sortBy" element={<RequireAuth><TaskList /></RequireAuth>} />

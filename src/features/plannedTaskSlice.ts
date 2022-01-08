@@ -2,13 +2,13 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import taskService from "../services/task.service";
 
 export interface PlannedTask {
-    Due: number
+    due: number
     taskCount: number
     items: TaskObject[]
 }
 
 export interface TaskObject {
-    ID: string
+    TaskID: string
     name: string
     tags: string[]
     priority: string
