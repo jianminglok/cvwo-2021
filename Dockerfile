@@ -10,6 +10,7 @@ LABEL maintainer="Lok Jian Ming <lokjianming@gmail.com>"
 # Install git.
 # Git is required for fetching the dependencies.
 RUN apk update && apk add --no-cache git
+RUN apk add --update tzdata
 
 # Set the current working directory inside the container 
 WORKDIR /app
@@ -30,6 +31,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 FROM alpine:latest
 ENV TZ=Asia/Singapore
 RUN apk --no-cache add ca-certificates
+RUN apk add --update tzdata
 
 WORKDIR /root/
 
