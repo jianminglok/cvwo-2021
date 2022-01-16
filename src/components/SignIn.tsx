@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { signIn, UserSignIn } from "../features/authSlice";
 import { RootState, useAppDispatch } from "../app/store";
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -16,7 +15,6 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Link from '@mui/material/Link';
 import Container from '@mui/material/Container';
 import { useNavigate, Navigate } from "react-router-dom";
-import NavBar from "./NavBar";
 import { Alert } from "@mui/material";
 import Loading from "./Loading";
 

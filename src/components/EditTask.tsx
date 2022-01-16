@@ -9,7 +9,7 @@ import Alert from '@mui/material/Alert';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { RootState, useAppDispatch } from '../app/store';
-import { Navigate, useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 import Loading from './Loading';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';

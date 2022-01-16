@@ -1,5 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import React, { useState, useMemo, useEffect, useContext } from 'react';
 import { styled, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -19,7 +18,6 @@ import ListItemText from '@mui/material/ListItemText';
 import TaskIcon from '@mui/icons-material/Task';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import StarsIcon from '@mui/icons-material/Stars';
-import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
@@ -28,9 +26,12 @@ import { RootState, useAppDispatch } from '../app/store';
 import { useSelector } from 'react-redux';
 import { signOut } from "../features/authSlice";
 import Button from '@mui/material/Button';
-import { alpha } from '@mui/material/styles';
+import { alpha, useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import { InputBase } from '@mui/material';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { ColorModeContext } from '../App';
 
 const drawerWidth = 240;
 
@@ -143,17 +144,8 @@ export default function NavBar() {
         setOpen(false);
     };
 
-    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-
-    const theme = useMemo(
-        () =>
-            createTheme({
-                palette: {
-                    mode: prefersDarkMode ? 'dark' : 'light',
-                },
-            }),
-        [prefersDarkMode],
-    );
+    const theme = useTheme();
+    const colorMode = useContext(ColorModeContext);
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -311,11 +303,11 @@ export default function NavBar() {
                 </List>
                 <Divider />
                 <List>
-                    <ListItem button>
+                    <ListItem button onClick={colorMode.toggleColorMode}>
                         <ListItemIcon>
-                            <SettingsIcon />
+                            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
                         </ListItemIcon>
-                        <ListItemText primary="Settings" />
+                        <ListItemText primary={theme.palette.mode === 'dark' ? 'Dark Mode' : 'Light Mode'} />
                     </ListItem>
                 </List>
             </Drawer>

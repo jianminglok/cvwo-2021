@@ -1,27 +1,15 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from 'react';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import NavBar from './NavBar'
 import Alert from '@mui/material/Alert';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import FormHelperText from '@mui/material/FormHelperText';
-import { signUp, UserSignUp } from '../features/authSlice';
 import { RootState, useAppDispatch } from '../app/store';
-import { Navigate, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import Loading from './Loading';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -30,8 +18,6 @@ import DatePicker from '@mui/lab/DatePicker';
 import TimePicker from '@mui/lab/TimePicker';
 import { NewTaskDetails, createTask, TaskServiceResponse, TagOption, getTags } from '../features/taskSlice';
 import { Autocomplete, Chip, Stack } from '@mui/material';
-import { Cancel } from '@mui/icons-material';
-import { response } from 'express';
 
 export default function NewTask() {
     const loading = useSelector((state: RootState) => state.task.status) === 'loading'
