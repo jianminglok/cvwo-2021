@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-
 import { signIn, UserSignIn } from "../features/authSlice";
 import { RootState, useAppDispatch } from "../app/store";
-
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
@@ -34,11 +32,11 @@ export default function SignIn() {
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
-    const { register, handleSubmit, control, setError, formState: { errors } } = useForm();
+    const { register, handleSubmit, control, setError, formState: { errors } } = useForm<UserSignIn>();
 
     const navigate = useNavigate();
 
-    const onSubmit = (values: UserSignIn) => {
+    const onSubmit: SubmitHandler<UserSignIn> = (values) => {
         dispatch(signIn(values))
             .unwrap()
             .then(() => {
@@ -68,13 +66,13 @@ export default function SignIn() {
 
                 {signInError && <Alert severity="error" sx={{ mt: 2 }}>{signInError}</Alert>}
 
-                { loading 
+                {loading
                     ? <Loading />
                     :
                     <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
                         <TextField
                             label="Email Address"
-                            error={errors.email ? true : errors.apiError ? true : false}
+                            error={errors.email ? true : false}
                             helperText={errors.email ? "Please enter a valid email address" : "Please enter your email address"}
                             margin="normal"
                             fullWidth
@@ -94,7 +92,7 @@ export default function SignIn() {
                             type={showPassword ? "text" : "password"}
                             id="password"
                             autoComplete="current-password"
-                            error={errors.password ? true : errors.apiError ? true : false}
+                            error={errors.password ? true : false}
                             helperText="Please enter your password"
                             {...register("password", {
                                 required: true

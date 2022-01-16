@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
@@ -28,50 +28,19 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import TimePicker from '@mui/lab/TimePicker';
-import { CreateTask, createTask, TaskServiceResponse } from '../features/taskSlice';
+import { NewTaskDetails, createTask, TaskServiceResponse, TagOption, getTags } from '../features/taskSlice';
 import { Autocomplete, Chip, Stack } from '@mui/material';
 import { Cancel } from '@mui/icons-material';
 import { response } from 'express';
 
-interface TagObject {
-    data: string
-}
-
-const handleDelete = () => {
-    console.info('You clicked the delete icon.');
-};
-
-const Tags = ({ data }: TagObject) => {
-    return (
-        <Box
-            sx={{
-                height: "100%",
-                display: "flex",
-                margin: "0 0.5rem 0 0",
-                justifyContent: "center",
-                alignContent: "center",
-            }}
-        >
-            <Typography>{data}</Typography>
-        </Box>
-    );
-};
-
-interface TagOptionType {
-    inputValue?: string;
-    name: string;
-}
-
-const previousTags: TagOptionType[] = [
-];
-
 export default function NewTask() {
-    const loading = useSelector((state: RootState) => state.auth.value.status) === 'loading'
+    const loading = useSelector((state: RootState) => state.task.status) === 'loading'
 
     const createTaskError = useSelector((state: RootState) => state.task.taskSliceError);
     const createTaskSuccess = useSelector((state: RootState) => state.task.taskSliceSuccess);
+    const previousTags: TagOption[] = useSelector((state: RootState) => state.task.tags);
 
-    const { register, handleSubmit, control, setError, watch, formState: { errors } } = useForm();
+    const { register, handleSubmit, control, setError, watch, formState: { errors } } = useForm<NewTaskDetails>();
 
     const dispatch = useAppDispatch();
 
@@ -82,7 +51,7 @@ export default function NewTask() {
 
     const navigate = useNavigate();
 
-    const onSubmit = (values: CreateTask) => {
+    const onSubmit: SubmitHandler<NewTaskDetails> = (values) => {
         values.tags = tags;
         if (dateValue) {
             values.dueDate = dateValue;
@@ -103,6 +72,7 @@ export default function NewTask() {
     };
 
     useEffect(() => {
+        dispatch(getTags())
         document.title = "New Task"
     }, []);
 
@@ -169,7 +139,7 @@ export default function NewTask() {
                                 setTags(newValue.map(str => str.replace(/\s/g, '')));
                             }}
                             multiple
-                            options={previousTags.map((option: TagOptionType) => option.name)}
+                            options={previousTags.map((option: TagOption) => option.name)}
                             freeSolo
                             renderTags={(value: readonly string[], getTagProps) =>
                                 value.map((option: string, index: number) => (

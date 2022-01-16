@@ -5,11 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../app/store";
 import { getTasks, TaskObject, TaskFilters, GroupedTasks } from "../features/taskSlice";
 import Loading from "./Loading";
-import NavBar from "./NavBar";
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Navigate, useNavigate, useParams } from "react-router";
-import { formatRelative, isAfter, isBefore, isSameDay, parseISO, subDays } from 'date-fns';
-import { formatDistance, formatDistanceToNowStrict, intervalToDuration } from "date-fns";
+import { useParams } from "react-router";
 import TaskItem from "./TaskItem";
 import DeleteTaskDialog from "./DeleteTaskDialog";
 
@@ -21,8 +17,6 @@ export default function TaskList() {
     const { tag, priority, sortBy, searchQuery } = useParams();
 
     const dispatch = useAppDispatch();
-
-    var isChip = false;
 
     const capitalize = (words: string) => words[0].toUpperCase() + words.substring(1).toLowerCase();
 

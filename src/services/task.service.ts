@@ -1,5 +1,14 @@
 import axios from "axios";
 
+const getPlannedTasks = () => {
+    return axios
+        .get("/api/tasks/planned", {
+        })
+        .then((response) => {
+            return response.data;
+        })
+};
+
 const getTasks = (tag? : string, priority? : string, sortBy? : string, searchQuery? : string) => {
     var filter = '';
 
@@ -21,9 +30,9 @@ const getTasks = (tag? : string, priority? : string, sortBy? : string, searchQue
         })
 };
 
-const getPlannedTasks = () => {
+const getTask = (taskId: string) => {
     return axios
-        .get("/api/tasks/planned", {
+        .get("/api/tasks/" + taskId, {
         })
         .then((response) => {
             return response.data;
@@ -35,6 +44,21 @@ const createTask = (name: string, priority: string, ownerId: string, tags?: stri
         .post("/api/tasks/create", {
             name,
             tags,
+            priority,
+            dueDateTime,
+            ownerId
+        })
+        .then((response) => {
+            return response.data;
+        });
+};
+
+const editTask = (name: string, priority: string, ownerId: string, completed: boolean, taskId: string, tags?: string[], dueDateTime?: string) => {
+    return axios
+        .put("/api/tasks/" + taskId, {
+            name,
+            tags,
+            completed,
             priority,
             dueDateTime,
             ownerId
@@ -60,24 +84,25 @@ const deleteTask = (taskId: string) => {
         })
 };
 
-const signOut = () => {
+const getTags = () => {
     return axios
-        .post("/api/users/signout")
+        .get("/api/tasks/tags", {
+        })
         .then((response) => {
-            if (response.data.success) {
-                localStorage.removeItem("user");
-            }
             return response.data;
         })
 };
 
+
 const taskService = {
-    getTasks,
     getPlannedTasks,
+    getTasks,
+    getTask,
     createTask,
+    editTask,
     toggleTask,
     deleteTask,
-    signOut,
+    getTags,
 };
 
 export default taskService;

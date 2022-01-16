@@ -12,14 +12,7 @@ export default function Home() {
 
     useEffect(() => {
         document.title = "Home"
-        fetchData();
     }, []);
-
-    const fetchData = () => {
-        axios.get('/api/api-1').then((response) => {
-            console.log(response.data)
-        });
-    }
 
     if (loading) {
         return (

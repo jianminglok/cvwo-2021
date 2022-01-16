@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../app/store";
-import { getTasks, TaskObject, TaskFilters, DeleteTask, deleteTask, TaskServiceResponse, toggleTask, setDeleteTaskDetails } from "../features/taskSlice";
+import { getTasks, TaskObject, TaskFilters, deleteTask, TaskServiceResponse, toggleTask, setDeleteTaskDetails } from "../features/taskSlice";
 import Loading from "./Loading";
 import NavBar from "./NavBar";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -46,7 +46,6 @@ export default function TaskItem({ task, currTime, openDialog }: TaskItemObject)
     }
 
     const handleClick = (event: React.MouseEvent<HTMLElement>, navigateDest: string) => {
-        console.log(event.currentTarget.nodeName)
         if (event.currentTarget.nodeName === 'A') {
             isChip = true;
         }

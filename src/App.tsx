@@ -1,18 +1,13 @@
 import * as React from 'react';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import SignIn from './components/SignIn';
-import Home from './components/Home';
 import { createTheme, CssBaseline, useMediaQuery } from '@mui/material';
 import { ThemeProvider } from '@mui/system';
 import SignUp from './components/SignUp';
 import NotFound from './components/NotFound';
 import { RootState, useAppDispatch } from './app/store';
-import setupAxiosInterceptors from './services/setupInterceptors';
-import { signOut } from './features/authSlice';
 import setupInterceptors from './services/setupInterceptors';
 import TaskList from './components/TaskList';
 import { useSelector } from 'react-redux';
@@ -22,8 +17,8 @@ import Fab from '@mui/material/Fab';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import { useNavigate } from 'react-router';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
-import { useLocation } from 'react-router';
 import NavBar from './components/NavBar';
+import EditTask from './components/EditTask';
 
 interface ProtectedRouteObject {
   children: ReactJSXElement
@@ -42,8 +37,6 @@ function PreviousRoute({ children }: ProtectedRouteObject) {
 export default function App() {
 
   setupInterceptors();
-
-  const dispatch = useAppDispatch();
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
@@ -80,6 +73,7 @@ export default function App() {
               <Route path="/" element={<RequireAuth><PlannedList /></RequireAuth>} />
               <Route path="/tasks" element={<RequireAuth><TaskList /></RequireAuth>} />
               <Route path="/tasks/new" element={<RequireAuth><NewTask /></RequireAuth>} />
+              <Route path="/task/:taskId" element={<RequireAuth><EditTask /></RequireAuth>} />
               <Route path="/tasks/tag/:tag" element={<RequireAuth><TaskList /></RequireAuth>} />
               <Route path="/tasks/priority/:priority" element={<RequireAuth><TaskList /></RequireAuth>} />
               <Route path="/tasks/sort/:sortBy" element={<RequireAuth><TaskList /></RequireAuth>} />

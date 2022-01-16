@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { styled, useTheme, createTheme, ThemeProvider } from '@mui/material/styles';
+import { styled, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -30,8 +30,7 @@ import { signOut } from "../features/authSlice";
 import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
-import { FormControl, InputAdornment, InputBase, InputLabel, OutlinedInput, TextField } from '@mui/material';
-import { getTasks, TaskFilters } from '../features/taskSlice';
+import { InputBase } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -124,7 +123,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function NavBar() {
-    const [loading, setLoading] = useState(false);
     const [term, setTerm] = useState('');
 
     const dispatch = useAppDispatch();
@@ -132,8 +130,6 @@ export default function NavBar() {
     const signedIn = useSelector((state: RootState) => state.auth.value.signedIn);
 
     const navigate = useNavigate();
-
-    const [items, setItems] = useState([]);
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -168,14 +164,12 @@ export default function NavBar() {
     };
 
     const signUserOut = () => {
-        setLoading(true);
         dispatch(signOut())
             .unwrap()
             .then(() => {
                 navigate('/signin')
             })
             .catch(() => {
-                setLoading(false);
             });;
     };
 
@@ -202,7 +196,7 @@ export default function NavBar() {
         navigate(to);
         handleDrawerClose();
     }
-    
+
     return (
         <Box sx={{ display: 'flex', flexGrow: 1 }}>
             <CssBaseline />
@@ -228,16 +222,18 @@ export default function NavBar() {
                         alignItems: 'center',
                     }}>
 
-                        <Search>
-                            <SearchIconWrapper>
-                                <SearchIcon />
-                            </SearchIconWrapper>
-                            <StyledInputBase
-                                onChange={e => setTerm(e.target.value)}
-                                placeholder="Search…"
-                                inputProps={{ 'id': 'taskSearchInput', 'aria-label': 'search' }}
-                            />
-                        </Search>
+                        {signedIn &&
+                            <Search>
+                                <SearchIconWrapper>
+                                    <SearchIcon />
+                                </SearchIconWrapper>
+                                <StyledInputBase
+                                    onChange={e => setTerm(e.target.value)}
+                                    placeholder="Search…"
+                                    inputProps={{ 'id': 'taskSearchInput', 'aria-label': 'search' }}
+                                />
+                            </Search>
+                        }
                     </Box>
 
                     {signedIn

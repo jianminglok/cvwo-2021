@@ -12,6 +12,10 @@ interface User {
     status: 'idle' | 'loading'
 }
 
+export interface UserState {
+    value: User
+}
+
 interface SignInResponse {
     userId: string
 }
@@ -31,14 +35,11 @@ export interface UserSignUp {
     lastName: string
     email: string
     password: string
+    confirmPassword: string
 }
 
 interface AuthError {
     error: Object
-}
-
-export interface UserState {
-    value: User
 }
 
 const initialState: UserState = user != "" ? {
@@ -55,24 +56,24 @@ const initialState: UserState = user != "" ? {
     }
 }
 
-export const signUp = createAsyncThunk<SignUpResponse, UserSignUp, { rejectValue: AuthError }>(
-    "auth/signup",
-    async (signUpDetails, thunkAPI) => {
-        try {
-            const data = await authService.signUp(signUpDetails.firstName, signUpDetails.lastName, signUpDetails.email, signUpDetails.password);
-            return { success: data }
-        } catch (err: any) {
-            return thunkAPI.rejectWithValue(err.response.data as AuthError)
-        }
-    }
-);
-
 export const signIn = createAsyncThunk<SignInResponse, UserSignIn, { rejectValue: AuthError }>(
     "auth/signin",
     async (signInDetails, thunkAPI) => {
         try {
             const data = await authService.signIn(signInDetails.email, signInDetails.password);
             return { userId: data }
+        } catch (err: any) {
+            return thunkAPI.rejectWithValue(err.response.data as AuthError)
+        }
+    }
+);
+
+export const signUp = createAsyncThunk<SignUpResponse, UserSignUp, { rejectValue: AuthError }>(
+    "auth/signup",
+    async (signUpDetails, thunkAPI) => {
+        try {
+            const data = await authService.signUp(signUpDetails.firstName, signUpDetails.lastName, signUpDetails.email, signUpDetails.password);
+            return { success: data }
         } catch (err: any) {
             return thunkAPI.rejectWithValue(err.response.data as AuthError)
         }

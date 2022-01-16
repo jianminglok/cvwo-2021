@@ -10,7 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Navigate, useNavigate, useParams } from "react-router";
 import { formatRelative, isAfter, isBefore, isSameDay, isTomorrow, parseISO, subDays } from 'date-fns';
 import { formatDistance, formatDistanceToNowStrict, intervalToDuration } from "date-fns";
-import { getPlannedTasks, PlannedTask } from "../features/plannedTaskSlice";
+import { getPlannedTasks, PlannedTaskObject } from "../features/plannedTaskSlice";
 import { isToday } from "date-fns/esm";
 import TaskItem from "./TaskItem";
 import DeleteTaskDialog from "./DeleteTaskDialog";
@@ -58,7 +58,7 @@ export default function PlannedList() {
                         ?
                         <Stack sx={{ width: '100%' }} spacing={2}>
                             {plannedTasks &&
-                                plannedTasks.map((taskGroup: PlannedTask, index: number) => {
+                                plannedTasks.map((taskGroup: PlannedTaskObject, index: number) => {
 
                                     const dueDate = taskGroup.due;
                                     //dueDate.setDate(dueDate.getDate());

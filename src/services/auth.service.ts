@@ -1,18 +1,4 @@
 import axios from "axios";
-import { useNavigate } from "react-router";
-
-const signUp = (firstName: string, lastName: string, email: string, password: string) => {
-  return axios
-    .post("/api/users/signup", {
-      firstName,
-      lastName,
-      email,
-      password,
-    })
-    .then((response) => {
-      return response.data;
-    })
-};
 
 const signIn = (email: string, password: string) => {
   return axios
@@ -28,6 +14,19 @@ const signIn = (email: string, password: string) => {
     });
 };
 
+const signUp = (firstName: string, lastName: string, email: string, password: string) => {
+  return axios
+    .post("/api/users/signup", {
+      firstName,
+      lastName,
+      email,
+      password,
+    })
+    .then((response) => {
+      return response.data;
+    })
+};
+
 const signOut = () => {
   return axios
     .post("/api/users/signout")
@@ -40,8 +39,8 @@ const signOut = () => {
 };
 
 const authService = {
-  signUp,
   signIn,
+  signUp,
   signOut,
 };
 

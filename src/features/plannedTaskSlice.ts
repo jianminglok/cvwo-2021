@@ -1,48 +1,32 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import taskService from "../services/task.service";
+import { TaskObject } from "./taskSlice";
 
-export interface PlannedTask {
+export interface PlannedTaskObject {
     due: number
     taskCount: number
     items: TaskObject[]
 }
 
-export interface TaskObject {
-    TaskID: string
-    name: string
-    tags: string[]
-    priority: string
-    completed: boolean
-    ownerId: string
-    dueDateTime: Date
-}
-
-interface Task {
-    plannedTasks: PlannedTask[]
+interface PlannedTask {
+    plannedTasks: PlannedTaskObject[]
     status: 'idle' | 'loading'
 }
 
-interface GetPlannedTaskResponse {
-    success: PlannedTask[]
-    error?: Object
+export interface PlannedTaskState {
+    value: PlannedTask
 }
 
-export interface UserState {
-    value: Task
+interface GetPlannedTaskResponse {
+    success: PlannedTaskObject[]
+    error?: Object
 }
 
 interface TaskError {
     error: Object
 }
 
-export interface TaskFilters {
-    tag?: string
-    priority?: string
-    sortBy?: string
-    getPlanned?: boolean
-}
-
-const initialState: Task = {
+const initialState: PlannedTask = {
     plannedTasks: [],
     status: 'idle'
 }
