@@ -125,8 +125,8 @@ func SignIn() gin.HandlerFunc {
 			c.JSON(http.StatusUnprocessableEntity, saveErr.Error())
 		}
 
-		c.SetCookie("access_token", token.AccessToken, int(time.Minute*15), "/", domainName, false, true)
-		c.SetCookie("refresh_token", token.RefreshToken, int(time.Hour*24*7), "/", domainName, false, true)
+		c.SetCookie("access_token", token.AccessToken, int(time.Minute*15), "/", domainName, true, true)
+		c.SetCookie("refresh_token", token.RefreshToken, int(time.Hour*24*7), "/", domainName, true, true)
 		c.JSON(http.StatusOK, gin.H{"user_id": foundUser.ID.String(), "success": "Successfully signed in"})
 	}
 }
@@ -151,8 +151,8 @@ func SignOut() gin.HandlerFunc {
 			return
 		}
 
-		c.SetCookie("access_token", "", -1, "/", domainName, false, true)
-		c.SetCookie("refresh_token", "", -1, "/", domainName, false, true)
+		c.SetCookie("access_token", "", -1, "/", domainName, true, true)
+		c.SetCookie("refresh_token", "", -1, "/", domainName, true, true)
 		c.JSON(http.StatusOK, gin.H{"success": "Successfully signed out"})
 	}
 }
@@ -218,8 +218,8 @@ func Refresh() gin.HandlerFunc {
 				return
 			}
 
-			c.SetCookie("access_token", token.AccessToken, int(time.Minute*15), "/", domainName, false, true)
-			c.SetCookie("refresh_token", token.RefreshToken, int(time.Hour*24*7), "/", domainName, false, true)
+			c.SetCookie("access_token", token.AccessToken, int(time.Minute*15), "/", domainName, true, true)
+			c.SetCookie("refresh_token", token.RefreshToken, int(time.Hour*24*7), "/", domainName, true, true)
 			c.JSON(http.StatusCreated, gin.H{"success": "Successfully refreshed token"})
 		} else {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Expired refresh token supplied"})
