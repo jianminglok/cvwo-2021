@@ -6,6 +6,8 @@ services:
     ports: 
       - 8080:8080 
     restart: always
+    environment:
+      - TZ: "Asia/Singapore"
     volumes:
       - api:/usr/src/app/
     depends_on:
@@ -19,6 +21,7 @@ services:
     container_name: cvwo_db_postgres
     restart: always
     environment:
+      - TZ: "Asia/Singapore"
       - POSTGRES_USER=${DB_USER}  
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
