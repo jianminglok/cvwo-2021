@@ -1,6 +1,6 @@
 # Start from golang base image
 FROM golang:alpine as builder
-ENV TZ="Asia/Singapore"
+ENV TZ=Asia/Singapore
 
 # ENV GO111MODULE=on
 
@@ -28,7 +28,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
 # Start a new stage from scratch
 FROM alpine:latest
-ENV TZ="Asia/Singapore"
+ENV TZ=Asia/Singapore
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
