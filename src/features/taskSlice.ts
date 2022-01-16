@@ -221,6 +221,7 @@ export const taskSlice = createSlice({
             .addCase(getTasks.fulfilled, (state, action) => {
                 state.status = 'idle';
                 state.groupedTasks = action.payload.success;
+                state.taskSliceSuccess = false;
             })
             .addCase(getTask.pending, (state) => {
                 state.status = 'loading';
@@ -291,6 +292,7 @@ export const taskSlice = createSlice({
             .addCase(getTags.fulfilled, (state, action) => {
                 state.status = 'idle';
                 state.tags = action.payload.success;
+                state.taskSliceSuccess = false;
             })
     }
 })
