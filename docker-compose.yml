@@ -2,16 +2,28 @@ version: "3.8"
 
 services:
   app:
-    container_name: cvwo-frontend
-    image: cvwo-frontend
+    container_name: frontend
+    image: frontend
     ports: 
-      - 8081:8081
+      - 80:80
+      - 443:443
     restart: always
     environment:
       - TZ=Asia/Singapore
+      - DOMAIN_NAME=cvwo.jianminglok.xyz
     build:
       context: .
       target: production
+    volumes:
+      - ./cvwo.conf.template:/etc/nginx/templates/cvwo.conf.template:ro
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/letsencrypt/:ro
+    
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
 
 networks:
   default:

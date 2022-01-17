@@ -1,6 +1,5 @@
 FROM node:14-alpine AS builder
 ENV NODE_ENV production
-ENV TZ="Asia/Singapore"
 
 # Add a work directory
 WORKDIR /app
@@ -17,17 +16,15 @@ RUN npm run build
 
 # Bundle static assets with nginx
 FROM nginx:1.21.0-alpine as production
-ENV NODE_ENV production
-ENV TZ="Asia/Singapore"
+
+# Add your cvwo.conf.template
+COPY ./cvwo.conf.template /etc/nginx/templates/
 
 # Copy built assets from builder
 COPY --from=builder /app/build /usr/share/nginx/html
-
-# Add your nginx.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port
 EXPOSE 8081
 
 # Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+CMD [ "nginx", "-g", "daemon off;" ]
