@@ -14,19 +14,16 @@ func main() {
 	port := os.Getenv("PORT")
 
 	if port == "" {
-		port = "8000"
+		port = "8080"
 	}
 
 	router := gin.New()
 	router.Use(gin.Logger())
 	routes.UserRoutes(router)
 
-	router.GET("/api/api-3", func(c *gin.Context) {
-		c.JSON(200, gin.H{"success": "Access granted for api-3"})
-	})
-
 	router.Use(middleware.Authentication())
 
+	// Only allow access to tasks after signing in
 	routes.TaskRoutes(router)
 
 	router.Run(":" + port)

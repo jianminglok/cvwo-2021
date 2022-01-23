@@ -79,6 +79,7 @@ func CreateTask() gin.HandlerFunc {
 	}
 }
 
+// Returns a JSON array containing all tasks regardless of their due date or completion status, sorted by their creation date
 func FetchTasks() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
@@ -113,6 +114,7 @@ func FetchTasks() gin.HandlerFunc {
 	}
 }
 
+// Returns a JSON array containing tasks sorted by their completion date and time
 func FetchPlanned() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
@@ -239,6 +241,7 @@ func FetchPlanned() gin.HandlerFunc {
 	}
 }
 
+// Returns a JSON array containing tasks due today
 func FetchToday() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
@@ -275,6 +278,7 @@ func FetchToday() gin.HandlerFunc {
 	}
 }
 
+// Returns a JSON array containing tasks filtered by tag or priority
 func FetchTasksWithFilter() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
@@ -340,6 +344,7 @@ func FetchTasksWithFilter() gin.HandlerFunc {
 	}
 }
 
+// Returns a single task as a JSON object
 func FetchTask() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
@@ -370,6 +375,7 @@ func FetchTask() gin.HandlerFunc {
 	}
 }
 
+// Returns a list of tags currently used by all tasks added
 func FetchTags() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
@@ -472,6 +478,7 @@ func UpdateTask() gin.HandlerFunc {
 	}
 }
 
+// Toggles the completion status of a task
 func ToggleTask() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
@@ -542,6 +549,7 @@ func DeleteTask() gin.HandlerFunc {
 	}
 }
 
+// Returns a JSON object containing tasks searched using their name, tags or priority
 func SearchTasks() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)

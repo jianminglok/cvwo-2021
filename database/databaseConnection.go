@@ -13,6 +13,7 @@ import (
 
 var RedisClient *redis.Client
 
+// Connects to Redis Cloud
 func init() {
 	redisAddress := os.Getenv("REDIS_ADDRESS")
 	redisPassword := os.Getenv("REDIS_PASSWORD")
@@ -34,6 +35,7 @@ func init() {
 	fmt.Println("Connected to Redis!")
 }
 
+// Creats a PostgreSQL instance
 func DBinstance() *gorm.DB {
 	err := godotenv.Load(".env")
 

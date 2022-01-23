@@ -2,8 +2,6 @@
 FROM golang:alpine as builder
 ENV TZ=Asia/Singapore
 
-# ENV GO111MODULE=on
-
 # Add Maintainer info
 LABEL maintainer="Lok Jian Ming <lokjianming@gmail.com>"
 
@@ -18,7 +16,7 @@ WORKDIR /app
 # Copy go mod and sum files 
 COPY go.mod go.sum ./
 
-# Download all dependencies. Dependencies will be cached if the go.mod and the go.sum files are not changed 
+# Download all dependencies.
 RUN go mod download 
 
 # Copy the source from the current directory to the working Directory inside the container 
@@ -35,12 +33,12 @@ RUN apk add --update tzdata
 
 WORKDIR /root/
 
-# Copy the Pre-built binary file from the previous stage. Observe we also copied the .env file
+# Copy the prebuilt binary file from the previous stage and the .env file
 COPY --from=builder /app/main .
 COPY --from=builder /app/.env .       
 
-# Expose port 8080 to the outside world
+# Expose port 8080
 EXPOSE 8080
 
-#Command to run the executable
+#Run the executable
 CMD ["./main"]

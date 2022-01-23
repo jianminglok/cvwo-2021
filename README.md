@@ -2,9 +2,9 @@
 
 Name: Lok Jian Ming
 
-Student ID: A0236537Y
+Matriculation Number: A0236537Y
 
-This branch contains the backend of the project built with Golang. The frontend can be found [here](https://github.com/jianminglok/cvwo-2021/tree/frontend).
+This branch contains the backend of the project built with Golang and PostgreSQL. The frontend can be found [here](https://github.com/jianminglok/cvwo-2021/tree/frontend).
 
 ## Where to access website
 
@@ -22,8 +22,12 @@ This branch contains the backend of the project built with Golang. The frontend 
 	cd cvwo-backend
 	```
 
-2. Run the commands below.
+2. Edit the .env file to insert the required variables and run the commands below to start.
 
 	```
 	go run main.go
 	``` 
+
+## Relational Database Schema
+
+![Relational database schema](https://i.ibb.co/D8PPfvc/Untitled-2.png)

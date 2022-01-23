@@ -6,6 +6,7 @@ services:
     ports: 
       - 8080:8080 
     restart: always
+    # Set timezone to Singapore
     environment:
       - TZ=Asia/Singapore
     volumes:
@@ -20,6 +21,7 @@ services:
     image: postgres:latest
     container_name: cvwo_db_postgres
     restart: always
+    # Set timezone to Singapore
     environment:
       - TZ=Asia/Singapore
       - POSTGRES_USER=${DB_USER}  
@@ -38,7 +40,7 @@ volumes:
   api:
   database_postgres:                 
 
-# Networks to be created to facilitate communication between containers
+# Network to be created to allow communication between frontend and backend
 networks:
   cvwo:
     external: 

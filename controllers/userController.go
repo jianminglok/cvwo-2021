@@ -26,6 +26,7 @@ var validate = validator.New()
 
 var domainName = os.Getenv("DOMAIN_NAME")
 
+// Hashes the password before storing it in the database during sign up
 func HashPassword(password string) string {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
@@ -35,6 +36,7 @@ func HashPassword(password string) string {
 	return string(bytes)
 }
 
+// Verifies password during sign in
 func VerifyPassword(userPassword string, providedPassword string) (bool, string) {
 	err := bcrypt.CompareHashAndPassword([]byte(providedPassword), []byte(userPassword))
 	check := true
@@ -157,6 +159,7 @@ func SignOut() gin.HandlerFunc {
 	}
 }
 
+// Refresh JWT access token using the supplied refresh token provided that the refresh token is valid
 func Refresh() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		refreshToken, err := c.Cookie("refresh_token")
@@ -166,30 +169,29 @@ func Refresh() gin.HandlerFunc {
 		}
 
 		token, err := jwt.Parse(refreshToken, func(token *jwt.Token) (interface{}, error) {
-			//Make sure that the token method conform to "SigningMethodHMAC"
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 			}
 			return []byte(os.Getenv("SECRET_KEY")), nil
 		})
 
-		//if there is an error, the token must have expired
+		// Returns an error if the token has expired
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Expired refresh token supplied"})
 			return
 		}
 
-		//is token valid?
+		// Check whether the token is valid
 		if _, ok := token.Claims.(jwt.Claims); !ok && !token.Valid {
 			c.JSON(http.StatusUnauthorized, err)
 			return
 		}
 
-		//Since token is valid, get the uuid:
+		// Since token is valid, get the uuid
 		claims, ok := token.Claims.(jwt.MapClaims) //the token claims should conform to MapClaims
 
 		if ok && token.Valid {
-			refreshUuid, ok := claims["refresh_uuid"].(string) //convert the interface to string
+			refreshUuid, ok := claims["refresh_uuid"].(string)
 			if !ok {
 				c.JSON(http.StatusUnprocessableEntity, err)
 				return
@@ -197,21 +199,21 @@ func Refresh() gin.HandlerFunc {
 
 			userId := claims["user_id"].(string)
 
-			//Delete the previous Refresh Token
+			// Delete the previous refresh token
 			deleted, delErr := helper.DeleteAuthRedis(refreshUuid)
 			if delErr != nil || deleted == 0 { //if any goes wrong
 				c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 				return
 			}
 
-			//Create new pairs of refresh and access tokens
+			// Create a new pair of access and refresh token
 			token, createErr := helper.CreateToken(userId)
 			if createErr != nil {
 				c.JSON(http.StatusForbidden, createErr.Error())
 				return
 			}
 
-			//save the tokens metadata to redis
+			// Save a copy of the token to redis
 			saveErr := helper.CreateAuthRedis(userId, token)
 			if saveErr != nil {
 				c.JSON(http.StatusForbidden, saveErr.Error())

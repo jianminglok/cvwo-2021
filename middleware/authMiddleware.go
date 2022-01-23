@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Authz validates token and authorizes users
+// Validates token and authorizes users
 func Authentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
 

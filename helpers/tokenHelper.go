@@ -30,6 +30,7 @@ var client *gorm.DB = database.Client
 
 var SECRET_KEY string = os.Getenv("SECRET_KEY")
 
+// Generates a pair of access and refresh token with the provided secret key
 func CreateToken(uid string) (signedToken *TokenDetails, err error) {
 	td := &TokenDetails{}
 	td.AtExpires = time.Now().Add(time.Minute * 15).Unix()
@@ -38,7 +39,7 @@ func CreateToken(uid string) (signedToken *TokenDetails, err error) {
 	td.RtExpires = time.Now().Add(time.Hour * 24 * 7).Unix()
 	td.RefreshUuid = uuid.New().String()
 
-	//Creating Access Token
+	//Creating access Token
 	atClaims := jwt.MapClaims{}
 	atClaims["authorized"] = true
 	atClaims["access_uuid"] = td.AccessUuid
@@ -50,7 +51,7 @@ func CreateToken(uid string) (signedToken *TokenDetails, err error) {
 		return nil, err
 	}
 
-	//Creating Refresh Token
+	//Creating refresh Token
 	rtClaims := jwt.MapClaims{}
 	rtClaims["refresh_uuid"] = td.RefreshUuid
 	rtClaims["user_id"] = uid
@@ -63,6 +64,7 @@ func CreateToken(uid string) (signedToken *TokenDetails, err error) {
 	return td, nil
 }
 
+// Store the tokens in Redis
 func CreateAuthRedis(userid string, td *TokenDetails) error {
 	at := time.Unix(td.AtExpires, 0) //converting Unix to UTC(to Time object)
 	rt := time.Unix(td.RtExpires, 0)
@@ -79,6 +81,7 @@ func CreateAuthRedis(userid string, td *TokenDetails) error {
 	return nil
 }
 
+// Extract the access token stored in HTTP only cookies
 func ExtractToken(r *http.Request) string {
 	bearToken, err := r.Cookie("access_token")
 	if err == nil {
@@ -88,6 +91,7 @@ func ExtractToken(r *http.Request) string {
 	return ""
 }
 
+// Verify the signing method of the token
 func VerifyToken(r *http.Request) (*jwt.Token, error) {
 	tokenString := ExtractToken(r)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -114,6 +118,7 @@ func ValidateToken(r *http.Request) error {
 	return nil
 }
 
+// Extract the current session's UUID and the user's ID from the token
 func ExtractTokenMetadata(r *http.Request) (*AccessDetails, error) {
 	token, err := VerifyToken(r)
 	if err != nil {
@@ -137,6 +142,7 @@ func ExtractTokenMetadata(r *http.Request) (*AccessDetails, error) {
 	return nil, err
 }
 
+// Verify token upon sign out
 func VerifyTokenSignOut(r *http.Request) (*jwt.Token, error) {
 	tokenString := ExtractToken(r)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -154,6 +160,7 @@ func VerifyTokenSignOut(r *http.Request) (*jwt.Token, error) {
 	return token, nil
 }
 
+// Extract token metadata upon sign out
 func ExtractTokenSignOut(r *http.Request) (*AccessDetails, error) {
 	tokenString := ExtractToken(r)
 
@@ -187,6 +194,7 @@ func ExtractTokenSignOut(r *http.Request) (*AccessDetails, error) {
 	return nil, err
 }
 
+// Fetch a token stored in Redis
 func FetchAuthRedis(authD *AccessDetails) (string, error) {
 	userid, err := database.RedisClient.Get(database.RedisClient.Context(), authD.AccessUuid).Result()
 	if err != nil {
@@ -196,6 +204,7 @@ func FetchAuthRedis(authD *AccessDetails) (string, error) {
 	return userid, nil
 }
 
+// Delete a token stored in Redis upon sign out
 func DeleteAuthRedis(uuidProvided string) (int64, error) {
 	deleted, err := database.RedisClient.Del(database.RedisClient.Context(), uuidProvided).Result()
 	if err != nil {
