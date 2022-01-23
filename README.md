@@ -15,7 +15,7 @@ This branch contains the backend of the project built with Golang. The frontend 
 
 ## How to run backend locally
 
-1. [Clone the repo](https://github.com/jianminglok/cvwo-2021/tree/frontend) and cd into it.
+1. [Clone the repo](https://github.com/jianminglok/cvwo-2021/tree/backend) and cd into it.
 
 	```
 	git clone https://github.com/jianminglok/cvwo-2021.git -b backend cvwo-backend
