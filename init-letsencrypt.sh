@@ -5,10 +5,10 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(cvwo.jianminglok.xyz)
+domains=(INSERT_DOMAIN_NAME_HERE)
 rsa_key_size=4096
 data_path="./certbot"
-email="lokjianming@gmail.com" # Adding a valid address is strongly recommended
+email=INSERT_YOUR_EMAIL_HERE # Adding a valid address is strongly recommended
 staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 if [ -d "$data_path" ]; then
@@ -72,7 +72,7 @@ docker-compose run --rm --entrypoint "\
     $email_arg \
     $domain_args \
     --rsa-key-size $rsa_key_size \
-    --agree-tos \
+    --agree-tos \git reset HEAD^ --hard
     --force-renewal" certbot
 echo
 

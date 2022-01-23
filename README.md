@@ -1,38 +1,103 @@
-# Create React App example with TypeScript
+# CVWO Task Manager (AY21/22)
 
-## How to use
+Name: Lok Jian Ming
 
-Download the example [or clone the repo](https://github.com/mui-org/material-ui):
+Student ID: A0236537Y
 
-<!-- #default-branch-switch -->
+This branch contains the frontend of the project built with React and Typescript. The backend can be found [here](https://github.com/jianminglok/cvwo-2021/tree/backend).
 
-```sh
-curl https://codeload.github.com/mui-org/material-ui/tar.gz/master | tar -xz --strip=2 material-ui-master/examples/create-react-app-with-typescript
-cd create-react-app-with-typescript
-```
+## Where to access website
 
-Install it and run:
+  The project has been deployed on a single AWS EC2 instance with the help of Docker and NGINX reverse proxy. Links to the site are provided below.
 
-```sh
-npm install
-npm start
-```
+- [Frontend](https://task.jianminglok.xyz/)
+- [Backend](https://task.jianminglok.xyz/api)
 
-or:
+## How to deploy
 
-<!-- #default-branch-switch -->
+1. Create an AWS EC2 instance of the type **t2.xlarge** running the **Ubuntu Server 20.04 LTS AMI (x86)** to ensure successful deployment (we will scale down the instance later on). Enable port **80** (HTTP) and **443** (HTTPS) under step 6 (Configure Security Group).
 
-[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/mui-org/material-ui/tree/master/examples/create-react-app-with-typescript)
+2. After the instance has been created, [allocate and associate an Elastic IP Address](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-eips.html) to it.
 
-## The idea behind the example
+3. Create an **A** record for your domain name inside your domain registrar's dashboard and point it to the associated Elastic IP Address.
 
-This example demonstrates how you can use [Create React App](https://github.com/facebookincubator/create-react-app) with [TypeScript](https://github.com/Microsoft/TypeScript).
-It includes `@mui/material` and its peer dependencies, including `emotion`, the default style engine in MUI v5.
-If you prefer, you can [use styled-components instead](https://mui.com/guides/interoperability/#styled-components).
+4. SSH into your newly created instance.
 
-## What's next?
+5. Install Docker and Docker Compose with the following commands:
 
-<!-- #default-branch-switch -->
+	```
+	sudo curl -L https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+	sudo chmod +x /usr/local/bin/docker-compose
+	docker-compose --version
+	sudo snap install docker
+	```
 
-You now have a working example project.
-You can head back to the documentation, continuing browsing it from the [templates](https://mui.com/getting-started/templates/) section.
+6. Create a network so that our Dockerised frontend and backend can communicate
+	```
+	sudo docker network create cvwo
+	```
+
+7. Clone the [backend repo](https://github.com/jianminglok/cvwo-2021/tree/backend) from GitHub and change directory into the folder.
+
+	```
+	git clone https://github.com/jianminglok/cvwo-2021.git -b backend ~/cvwo-backend
+	cd ~/cvwo-backend
+	```  
+
+8.  Edit the .env file to insert your domain name and deploy it with Docker.
+
+	```
+	vim .env
+	sudo docker-compose up -d
+	```
+
+9. Clone the [frontend repo](https://github.com/jianminglok/cvwo-2021/tree/frontend) from GitHub and change directory into the folder.
+
+	```
+	git clone https://github.com/jianminglok/cvwo-2021.git -b frontend ~/cvwo-frontend
+	cd ~/cvwo-frontend
+	```   
+
+10. Edit the files init-letsencrypt.sh and cvwo.conf by replacing **all** occurrences of **INSERT_DOMAIN_NAME_HERE** and **INSERT_YOUR_EMAIL_HERE** with your domain name and email respectively.
+
+	```
+	vim init-letsencrypt.sh
+	vim cvwo.conf
+	```
+
+11. Give necessary permissions and start the frontend deployment with Docker.
+
+	```
+	chmod a+x init-letsencrypt.sh
+	sudo chmod -R 755 ./
+	sudo bash ./init-letsencrypt.sh
+	sudo docker-compose up -d
+	```
+
+12. Verify that everything is working properly, and proceed to scale down your AWS EC2 instance by [changing its type](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-resize.html) to **t2.micro**.
+
+13. To stop the frontend and/or the backend, enter the respective directory and run
+
+	```
+	sudo docker-compose down
+	```
+
+## How to run frontend locally
+
+1. [Clone the repo](https://github.com/jianminglok/cvwo-2021/tree/frontend) and cd into it
+
+	```
+	git clone https://github.com/jianminglok/cvwo-2021.git -b frontend cvwo-frontend
+	cd cvwo-frontend
+	```
+
+2. Install it and run using the commands below.
+
+	```
+	npm install
+	npm start
+	``` 
+
+## Relational Database Schema
+
+![Relational database schema](https://i.ibb.co/D8PPfvc/Untitled-2.png)

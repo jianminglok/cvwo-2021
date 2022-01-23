@@ -10,7 +10,6 @@ services:
     restart: always
     environment:
       - TZ=Asia/Singapore
-      - DOMAIN_NAME=cvwo.jianminglok.xyz
     build:
       context: .
       target: production

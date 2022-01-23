@@ -18,7 +18,7 @@ RUN npm run build
 FROM nginx:1.21.0-alpine as production
 
 # Add your cvwo.conf.template
-COPY ./cvwo.conf.template /etc/nginx/templates/
+COPY ./cvwo.conf /etc/nginx/conf.d/
 
 # Copy built assets from builder
 COPY --from=builder /app/build /usr/share/nginx/html
