@@ -4,26 +4,25 @@ ENV NODE_ENV production
 # Add a work directory
 WORKDIR /app
 
-# Cache and Install dependencies
+# Cache and install dependencies
 COPY package.json .
 RUN npm install --production
 
 # Copy app files
 COPY . .
 
-# Build the app
+# Build the React app
 RUN npm run build
 
-# Bundle static assets with nginx
 FROM nginx:1.21.0-alpine as production
 
-# Add your cvwo.conf.template
+# Copy cvwo.conf
 COPY ./cvwo.conf /etc/nginx/conf.d/
 
 # Copy built assets from builder
 COPY --from=builder /app/build /usr/share/nginx/html
 
-# Expose port
+# Expose port 8081
 EXPOSE 8081
 
 # Start nginx

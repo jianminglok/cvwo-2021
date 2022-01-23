@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Get a list of planned tasks by date
 const getPlannedTasks = () => {
     return axios
         .get("/api/tasks/planned", {
@@ -9,6 +10,7 @@ const getPlannedTasks = () => {
         })
 };
 
+// Get a list of all tasks, optionally filtered by tag and priority
 const getTasks = (tag? : string, priority? : string, sortBy? : string, searchQuery? : string) => {
     var filter = '';
 
@@ -30,6 +32,7 @@ const getTasks = (tag? : string, priority? : string, sortBy? : string, searchQue
         })
 };
 
+// Get a single task
 const getTask = (taskId: string) => {
     return axios
         .get("/api/tasks/" + taskId, {
@@ -68,6 +71,7 @@ const editTask = (name: string, priority: string, ownerId: string, completed: bo
         });
 };
 
+// Toggle the completion status of a task
 const toggleTask = (taskId: string) => {
     return axios
         .put("/api/tasks/completed/" + taskId)
@@ -84,6 +88,7 @@ const deleteTask = (taskId: string) => {
         })
 };
 
+// Get a list of all tags currently used in tasks
 const getTags = () => {
     return axios
         .get("/api/tasks/tags", {

@@ -21,7 +21,6 @@ import Loading from './Loading';
 export default function SignUp() {
     const loading = useSelector((state: RootState) => state.auth.value.status) === 'loading'
 
-    const signedIn = useSelector((state: RootState) => state.auth.value.signedIn);
     const signUpError = useSelector((state: RootState) => state.auth.value.signUpError);
     const signUpSuccess = useSelector((state: RootState) => state.auth.value.signUpSuccess);
 
@@ -29,19 +28,23 @@ export default function SignUp() {
 
     const dispatch = useAppDispatch();
 
+    // Shows password as plain text when button in password field clicked
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
+    // Shoes confirm password as plain text when button in confirm password field checked
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
     const handleMouseDownConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
+    // Check if confirm password field matches password
     const password = useRef({});
     password.current = watch("password", "");
 
     const navigate = useNavigate();
 
+    // Dispatch action to sign up user when sign up button pressed
     const onSubmit: SubmitHandler<UserSignUp> = (values) => {
         dispatch(signUp(values))
             .unwrap()

@@ -35,6 +35,7 @@ export default function TaskList() {
 
     const closeDialog = () => setDialogIsOpen(false)
 
+    // Dispatch action to get tasks based on filters
     useEffect(() => {
         dispatch(getTasks(taskFilters));
         document.title = "Tasks";

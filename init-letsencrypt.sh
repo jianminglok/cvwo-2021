@@ -5,11 +5,11 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(INSERT_DOMAIN_NAME_HERE)
+domains=(INSERT_DOMAIN_NAME_HERE) #Insert your domain name here within the parantheses
 rsa_key_size=4096
 data_path="./certbot"
-email=INSERT_YOUR_EMAIL_HERE # Adding a valid address is strongly recommended
-staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
+email=INSERT_YOUR_EMAIL_HERE # Insert your email address here
+staging=0 # Set to 1 if you're testing your setup to avoid hitting rate limits
 
 if [ -d "$data_path" ]; then
   read -p "Existing data found for $domains. Continue and replace existing certificate? (y/N) " decision
@@ -63,7 +63,7 @@ case "$email" in
   *) email_arg="--email $email" ;;
 esac
 
-# Enable staging mode if needed
+# Use staging mode if requested
 if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
 docker-compose run --rm --entrypoint "\

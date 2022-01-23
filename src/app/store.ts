@@ -4,6 +4,7 @@ import authReducer from "../features/authSlice"
 import taskReducer from "../features/taskSlice"
 import plannedTaskReducer from "../features/plannedTaskSlice"
 
+// Export all reducers
 export const store = configureStore({
     reducer: {
         auth: authReducer,

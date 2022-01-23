@@ -31,6 +31,7 @@ export default function DeleteTaskDialog({ open, onClose }: DialogProps) {
     searchQuery: searchQuery
   }
 
+  // Dispatch action to delete task with its ID 
   const handleDelete = (taskId: string) => {
     dispatch(deleteTask({ "taskId": taskId }))
       .unwrap()

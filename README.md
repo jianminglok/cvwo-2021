@@ -2,13 +2,13 @@
 
 Name: Lok Jian Ming
 
-Student ID: A0236537Y
+Matriculation Number: A0236537Y
 
-This branch contains the frontend of the project built with React and Typescript. The backend can be found [here](https://github.com/jianminglok/cvwo-2021/tree/backend).
+This branch contains the frontend of the project built with React, Redux Toolkit, Material UI, Axios and Typescript. The backend can be found [here](https://github.com/jianminglok/cvwo-2021/tree/backend).
 
 ## Where to access website
 
-  The project has been deployed on a single AWS EC2 instance with the help of Docker and NGINX reverse proxy. Links to the site are provided below.
+  The project has been deployed on a single AWS EC2 instance with the help of Docker, a modified version of [nginx-certbot](https://github.com/wmnnd/nginx-certbot) NGINX reverse proxy. Links to the site are provided below.
 
 - [Frontend](https://task.jianminglok.xyz/)
 - [Backend](https://task.jianminglok.xyz/api)
@@ -44,7 +44,7 @@ This branch contains the frontend of the project built with React and Typescript
 	cd ~/cvwo-backend
 	```  
 
-8.  Edit the .env file to insert your domain name and deploy it with Docker.
+8.  Edit the .env file to insert the required variables and deploy it with Docker.
 
 	```
 	vim .env

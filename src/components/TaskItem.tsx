@@ -55,11 +55,13 @@ export default function TaskItem({ task, currTime, openDialog }: TaskItemObject)
         }
     }
 
+    // Dispatch action to delete task
     const handleDelete = (taskName: string, taskId: string) => {
         openDialog();
         dispatch(setDeleteTaskDetails({taskName, taskId}));
     }
 
+    // Dispatch action to toggle the completion status of task
     const handleComplete = (taskId: string) => {
         dispatch(toggleTask({ "taskId": taskId }))
             .unwrap()

@@ -40,6 +40,7 @@ export default function EditTask() {
 
     const [tags, setTags] = useState<string[] | undefined>([]);
 
+    // Dispatch action to edit task when submit button pressed
     const onSubmit: SubmitHandler<EditTaskDetails> = (values) => {
         values.tags = tags;
         if (dateValue) {

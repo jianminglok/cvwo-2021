@@ -106,6 +106,7 @@ const initialState: Task = {
     tags: []
 }
 
+// Get all tasks, optionally filtered by tag and priority
 export const getTasks = createAsyncThunk<GetTasksResponse, TaskFilters, { rejectValue: TaskError }>(
     "task/get",
     async (taskFilters) => {
@@ -114,6 +115,7 @@ export const getTasks = createAsyncThunk<GetTasksResponse, TaskFilters, { reject
     }
 )
 
+// Get a single task
 export const getTask = createAsyncThunk<GetTaskResponse, SingleTaskDetail, { rejectValue: TaskError }>(
     "task/getOne",
     async (getTaskDetails) => {
@@ -177,6 +179,7 @@ export const editTask = createAsyncThunk<TaskServiceResponse, EditTaskDetails, {
     }
 );
 
+// Toggle the completion status of a task
 export const toggleTask = createAsyncThunk<TaskServiceResponse, SingleTaskDetail, { rejectValue: TaskError }>(
     "task/toggle",
     async (toggleTaskDetails) => {
@@ -184,6 +187,7 @@ export const toggleTask = createAsyncThunk<TaskServiceResponse, SingleTaskDetail
         return { success: data }
     }
 )
+
 
 export const deleteTask = createAsyncThunk<TaskServiceResponse, SingleTaskDetail, { rejectValue: TaskError }>(
     "task/delete",
@@ -200,6 +204,8 @@ export const setDeleteTaskDetails = createAsyncThunk(
     }
 )
 
+
+// Get a list of all tags currently used in tasks
 export const getTags = createAsyncThunk<GetTagsResponse, void, { rejectValue: TaskError }>(
     "task/getTags",
     async () => {

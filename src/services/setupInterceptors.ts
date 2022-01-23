@@ -12,6 +12,7 @@ const setupInterceptors = () => {
 
     const axiosService = axios.create();
 
+    // Automatically refreshes access token when it has expired using refresh token, and resubmits the HTTP request
     axios.interceptors.response.use(
         (res: AxiosResponse) => {
             return res;

@@ -31,6 +31,7 @@ export default function PlannedList() {
 
     const closeDialog = () => setDialogIsOpen(false)
 
+    // Dispatch action to get planned tasks once
     useEffect(() => {
         dispatch(getPlannedTasks());
         document.title = "Planned";

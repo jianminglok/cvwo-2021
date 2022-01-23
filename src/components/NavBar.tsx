@@ -83,6 +83,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
+// Search bar component
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -147,6 +148,7 @@ export default function NavBar() {
     const theme = useTheme();
     const colorMode = useContext(ColorModeContext);
 
+    // Handle open and close of menu on profile icon
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -155,6 +157,7 @@ export default function NavBar() {
         setAnchorEl(null);
     };
 
+    // Dispatch action to sign out
     const signUserOut = () => {
         dispatch(signOut())
             .unwrap()
@@ -165,6 +168,8 @@ export default function NavBar() {
             });;
     };
 
+
+    // Get value of search bar after fixed interval
     function useDelayedValue(srcValue: string, delay = 0) {
         const [value, setValue] = useState(srcValue);
         useEffect(() => {

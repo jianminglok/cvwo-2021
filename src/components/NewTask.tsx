@@ -37,6 +37,7 @@ export default function NewTask() {
 
     const navigate = useNavigate();
 
+    // Dispatch action to add a new task when submit button pressed
     const onSubmit: SubmitHandler<NewTaskDetails> = (values) => {
         values.tags = tags;
         if (dateValue) {

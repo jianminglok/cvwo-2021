@@ -34,6 +34,7 @@ export default function SignIn() {
 
     const navigate = useNavigate();
 
+    // Dispatch action to sign user in when sign in button pressed
     const onSubmit: SubmitHandler<UserSignIn> = (values) => {
         dispatch(signIn(values))
             .unwrap()
@@ -118,11 +119,6 @@ export default function SignIn() {
                             Sign In
                         </Button>
                         <Grid container>
-                            <Grid item xs>
-                                <Link onClick={() => navigate('/forgotpassword')} variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
                             <Grid item>
                                 <Link onClick={() => navigate('/signup')} variant="body2">
                                     {"Don't have an account? Sign Up"}
