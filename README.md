@@ -6,6 +6,11 @@ Matriculation Number: A0236537Y
 
 This branch contains the backend of the project built with Golang and PostgreSQL. The frontend can be found [here](https://github.com/jianminglok/cvwo-2021/tree/frontend).
 
+## Mid-assignment and Final Writeup
+
+- [Mid-assignment Writeup](https://github.com/jianminglok/cvwo-2021/blob/frontend/cvwo-writeup/LokJianMing_A0236537Y.pdf)
+- [Final Writeup](https://github.com/jianminglok/cvwo-2021/blob/frontend/cvwo-writeup/LokJianMing_A0236537Y_FinalWriteup.pdf)
+
 ## Where to access website
 
   The project has been deployed on a single AWS EC2 instance with the help of Docker and NGINX reverse proxy. Links to the site are provided below.
