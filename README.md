@@ -6,6 +6,11 @@ Matriculation Number: A0236537Y
 
 This branch contains the frontend of the project built with React, Redux Toolkit, Material UI, Axios and Typescript. The backend can be found [here](https://github.com/jianminglok/cvwo-2021/tree/backend).
 
+## Mid-assignment and Final Writeup
+
+- [Mid-assignment Writeup](https://github.com/jianminglok/cvwo-2021/blob/frontend/cvwo-writeup/LokJianMing_A0236537Y.pdf)
+- [Final Writeup](https://github.com/jianminglok/cvwo-2021/blob/frontend/cvwo-writeup/LokJianMing_A0236537Y_FinalWriteup.pdf)
+
 ## Where to access website
 
   The project has been deployed on a single AWS EC2 instance with the help of Docker, a modified version of [nginx-certbot](https://github.com/wmnnd/nginx-certbot) NGINX reverse proxy. Links to the site are provided below.
